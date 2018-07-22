@@ -1,0 +1,21 @@
+<table class="table table-condensed table-hover table-bordered table-light" *ngIf=!selected >
+  <thead class="thead-dark"><tr><th colspan=4>Films</th></tr>
+    <tr><th>Title</th><th>Description</th><th>Rating</th><th>Details</th></tr></thead>
+<tr *ngFor='let film of films'><td>{{film.title}}</td><td>{{film.description}}</td>
+  <td>{{film.rating}}</td><td><button (click)="displayFilm(film)">Details</button></td></tr>
+</table>
+
+<div class=container *ngIf=selected>
+
+
+<h1>{{selected.title}}</h1>
+<p>{{selected.description}}</p>
+<p>{{selected.rating}}</p>
+<p>{{selected.releaseYear}}</p>
+<p>{{selected.length}}</p>
+
+<h3>Actors:</h3>
+<ul>
+  <li *ngFor='let actor of selected.actors'>{{actor.fname + ' ' + actor.lname}}</li>
+</ul>
+</div>

@@ -1,0 +1,10 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+table.table {
+  width: auto;
+  margin:0 auto;
+}
+
+table.table tbody td {
+  padding:10px;
+}
