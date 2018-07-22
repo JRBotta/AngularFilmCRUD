@@ -4,7 +4,7 @@ export class Actor {
   fname: string;
   lname: string;
 
-  constructor(fname: string, lname: string) {
+  constructor(fname?: string, lname?: string) {
     this.id = count++;
     this.fname = fname;
     this.lname = lname;

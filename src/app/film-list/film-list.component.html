@@ -1,21 +1,194 @@
-<table class="table table-condensed table-hover table-bordered table-light" *ngIf=!selected >
-  <thead class="thead-dark"><tr><th colspan=4>Films</th></tr>
-    <tr><th>Title</th><th>Description</th><th>Rating</th><th>Details</th></tr></thead>
-<tr *ngFor='let film of films'><td>{{film.title}}</td><td>{{film.description}}</td>
-  <td>{{film.rating}}</td><td><button (click)="displayFilm(film)">Details</button></td></tr>
+<table class="table table-condensed table-hover table-bordered table-light" *ngIf=!selected&&!viewActors>
+  <thead class="thead-dark">
+    <tr align=center>
+      <th colspan=4>Films</th>
+    </tr>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Rating</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tr *ngFor='let film of films'>
+    <td>{{film.title}}</td>
+    <td>{{film.description}}</td>
+    <td>{{film.rating}}</td>
+    <td>
+      <button (click)="displayFilm(film)">Details</button>
+    </td>
+  </tr>
+  <tr>
+    <button (click)="viewActors = true">Show All Actors</button>
+  </tr>
 </table>
 
-<div class=container *ngIf=selected>
+<table class="table table-condensed table-hover table-bordered table-light" *ngIf=!selected&&viewActors>
+  <thead class="thead-dark">
+    <tr align=center>
+      <th colspan=4>Actors</th>
+    </tr>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tr *ngFor='let actor of actors'>
+    <td>{{actor.fname}}</td>
+    <td>{{actor.lname}}</td>
+    <td>
+      <button (click)="deleteActor(actor)">Delete</button>
+    </td>
+  </tr>
+  <tr>
+    <button (click)="viewActors = false">Show All Films</button>
+  </tr>
+</table>
+
+<br>
+<br>
+<div style="margin:auto;width: 50%;
+border: 3px solid rgb(33, 41, 33);
+padding: 10px;" *ngIf=!selected>
+  <table class="table table-condensed table-hover table-bordered table-light">
+    <h1>Add Film</h1>
+    <form>
+      <tr>
+        <td>Title: </td>
+        <td>
+          <input type='text' name="title" [(ngModel)]="newFilm.title">
+        </td>
+      </tr>
+      <tr>
+        <td>Description: </td>
+        <td>
+          <input type='text' name="description" [(ngModel)]="newFilm.description">
+        </td>
+      </tr>
+      <tr>
+        <td>Rating: </td>
+        <td>
+          <input type='text' name="rating" [(ngModel)]="newFilm.rating">
+        </td>
+      </tr>
+      <tr>
+        <td>Release Year: </td>
+        <td>
+          <input type='number' name="releaseYear" [(ngModel)]="newFilm.releaseYear">
+        </td>
+      </tr>
+      <tr>
+        <td>Length (Minutes): </td>
+        <td>
+          <input type='number' name="length" [(ngModel)]="newFilm.length">
+        </td>
+      </tr>
+      <tr>
+        <td align=center colspan=2>
+          <button class="button" (click)="addFilm()">Add Film</button>
+        </td>
+      </tr>
+    </form>
+  </table>
+</div>
+<div style="margin:auto;width: 50%;
+border: 3px solid rgb(33, 41, 33);
+padding: 10px;" *ngIf=!selected>
+  <table class="table table-condensed table-hover table-bordered table-light">
+    <h1>Add Actor</h1>
+    <form>
+      <tr>
+        <td>First Name: </td>
+        <td>
+          <input type='text' name="fname" [(ngModel)]="newActor.fname">
+        </td>
+      </tr>
+      <tr>
+        <td>Last Name: </td>
+        <td>
+          <input type='text' name="lname" [(ngModel)]="newActor.lname">
+        </td>
+      </tr>
+      <tr>
+        <td align=center colspan=2>
+          <button class="button" (click)="addActor()">Add Actor</button>
+        </td>
+      </tr>
+    </form>
+  </table>
+</div>
+
+<div class=container *ngIf=selected&&!editFilm>
 
 
-<h1>{{selected.title}}</h1>
-<p>{{selected.description}}</p>
-<p>{{selected.rating}}</p>
-<p>{{selected.releaseYear}}</p>
-<p>{{selected.length}}</p>
+  <h1>{{selected.title}}</h1>
+  <p>{{selected.description}}</p>
+  <p>{{selected.rating}}</p>
+  <p>{{selected.releaseYear}}</p>
+  <p>{{selected.length}}</p>
 
-<h3>Actors:</h3>
-<ul>
-  <li *ngFor='let actor of selected.actors'>{{actor.fname + ' ' + actor.lname}}</li>
-</ul>
+  <h3>Actors:</h3>
+  <ul>
+    <li *ngFor='let actor of selected.actors'>{{actor.fname + ' ' + actor.lname}}</li>
+  </ul>
+  <form>
+    <select name="actorHold" [(ngModel)]="actorHold">
+      <option *ngFor="let actor of actors" value={{actor.id}}>{{actor.fname + ' ' + actor.lname}}</option>
+    </select>
+    <button class="button" (click)="addActorToFilm()">Add Actor</button>
+  </form>
+  <br>
+  <button class="button" (click)="setEditFilm()">Edit</button>
+  <button class="button" (click)="deleteFilm()">Delete</button>
+  <button class="button" (click)="selected=null">Back</button>
+</div>
+
+<div *ngIf=editFilm style="margin:auto;width: 50%;
+border: 3px solid rgb(33, 41, 33);
+padding: 10px;">
+  <table class="table table-condensed table-hover table-bordered table-light">
+    <form>
+      <tr>
+        <td>Title: {{editFilm.title}}</td>
+        <td>
+          <input type='text' name="title" [(ngModel)]="editFilm.title">
+        </td>
+      </tr>
+      <tr>
+        <td>Description: {{editFilm.description}}</td>
+        <td>
+          <input type='text' name="description" [(ngModel)]="editFilm.description">
+        </td>
+      </tr>
+      <tr>
+        <td>Rating: {{editFilm.rating}}</td>
+        <td>
+          <input type='text' name="rating" [(ngModel)]="editFilm.rating">
+        </td>
+      </tr>
+      <tr>
+        <td>Release Year: {{editFilm.releaseYear}}</td>
+        <td>
+          <input type='number' name="releaseYear" [(ngModel)]="editFilm.releaseYear">
+        </td>
+      </tr>
+      <tr>
+        <td>Length (Minutes): {{editFilm.length}}</td>
+        <td>
+          <input type='number' name="length" [(ngModel)]="editFilm.length">
+        </td>
+      </tr>
+      <tr>
+        <td align=center colspan=2>
+          <button class="button" (click)="updateFilm()">Save Changes</button>
+        </td>
+      </tr>
+      <tr>
+        <td align=center colspan=2>
+          <button class="button" (click)="editFilm=null">Cancel Changes</button>
+        </td>
+      </tr>
+    </form>
+  </table>
 </div>

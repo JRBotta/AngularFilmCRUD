@@ -41,10 +41,57 @@ export class FilmListComponent implements OnInit {
     )
   ];
   selected = null;
+  newFilm = new Film();
+  editFilm = null;
+  newActor = new Actor();
+  viewActors = false;
+  actorHold = null;
 
+  deleteFilm() {
+    this.films.splice(this.films.indexOf(this.selected), 1);
+    this.selected = null;
+  }
+  setEditFilm() {
+    this.editFilm = Object.assign({}, this.selected);
+  }
+  updateFilm() {
+    for (const p in this.editFilm) {
+      if (this.editFilm[p] !== null) {
+        this.films[this.editFilm.id - 1][p] = this.editFilm[p];
+      }
+    }
+    this.selected = this.films[this.editFilm.id - 1];
+    this.editFilm = null;
+  }
+  addFilm() {
+    this.films.push(this.newFilm);
+    this.selected = this.newFilm;
+    this.newFilm = new Film();
+  }
   displayFilm(film) {
     this.selected = film;
-    console.log(this.selected);
+  }
+  deleteActor(actor) {
+    this.actors.splice(this.actors.indexOf(actor), 1);
+    for (let i = 0; i < this.films.length; i++) {
+      for (let j = 0; j < this.films[i].actors.length; j++) {
+        if (this.films[i].actors[j] === actor) {
+          this.films[i].actors.splice(j, 1);
+        }
+      }
+    }
+    this.selected = null;
+  }
+  addActor() {
+    this.actors.push(this.newActor);
+    this.viewActors = true;
+    this.newActor = new Actor();
+  }
+  addActorToFilm() {
+    if (this.actorHold != null) {
+      this.selected.actors.push(this.actors[this.actorHold - 1]);
+      this.actorHold = null;
+    }
   }
   constructor() {}
 

@@ -11,12 +11,12 @@ export class Film {
   actors: Actor[];
 
   constructor(
-    title: string,
-    description: string,
-    releaseYear: number,
-    length: number,
-    rating: string,
-    actors: Actor[]
+    title?: string,
+    description?: string,
+    releaseYear?: number,
+    length?: number,
+    rating?: string,
+    actors?: Actor[]
   ) {
     this.id = count++;
     this.title = title;
